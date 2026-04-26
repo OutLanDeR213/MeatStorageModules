@@ -1,44 +1,44 @@
-# Architectural Design
+# Архітектурні рішення
 
-## Key constraint
+## Ключове обмеження
 
-Direct modification of `product.product` or `product.template` is forbidden.
+Пряма зміна собівартості через `product.product` або `product.template` — заборонена.
 
-## Solution: `stock.valuation.layer` with `quantity=0`
+## Рішення: `stock.valuation.layer` з `quantity=0`
 
-Instead of touching the product cost, we create a new `stock.valuation.layer` record with:
-- `quantity = 0` — no physical stock change
-- `value = storage_cost` — cost adjustment only
+Замість зміни собівартості продукту ми створюємо новий запис `stock.valuation.layer` з:
+- `quantity = 0` — без фізичної зміни залишків
+- `value = storage_cost` — лише коригування вартості
 
-This is the standard Odoo pattern used by **Landed Costs** and inventory revaluations.
-It increases the product's inventory value on the balance sheet without modifying `standard_price`.
+Це стандартний Odoo-патерн, який використовують **Landed Costs** та переоцінка запасів.
+Він збільшує балансову вартість запасів без зміни `standard_price` у продукті.
 
-## Why a separate log model (`stock.storage.cost`)?
+## Чому окрема модель-лог (`stock.storage.cost`)?
 
-`stock.valuation.layer` does not store context needed for the report:
-- Which layer was the original receipt (initial cost)
-- How many times this specific batch was adjusted (adjustment number)
-- The weight in kg at the time of accrual
+`stock.valuation.layer` не зберігає контекст, необхідний для звіту:
+- Який шар є оригінальним приходом (початкова собівартість)
+- Скільки разів конкретну партію коригували (номер нарахування)
+- Вагу в кг на момент нарахування
 
-A dedicated log table gives full traceability and makes the report query simple and fast.
+Власна таблиця логів забезпечує повну трасованість і спрощує запит звіту.
 
-## Why `_auto = False` for the report?
+## Чому `_auto = False` для звіту?
 
-The report aggregates data across two tables (`stock_storage_cost` + `stock_valuation_layer`).
-A SQL view is more efficient than computed fields, and works natively with Odoo's pivot view.
+Звіт агрегує дані з двох таблиць (`stock_storage_cost` + `stock_valuation_layer`).
+SQL-view ефективніша за computed fields і нативно підтримується pivot-view Odoo.
 
-## UoM handling
+## Обробка одиниць виміру (UoM)
 
-Two cases are supported:
-- **Weight UoM (kg, g, t)** — converted to kg via `uom._compute_quantity()`
-- **Piece/other UoM** — multiplied by `product.weight` (weight per unit in kg)
+Підтримуються два варіанти:
+- **Вагові UoM (кг, г, т)** — конвертуються в кг через `uom._compute_quantity()`
+- **Штучні/інші UoM** — множиться на `product.weight` (вага одиниці в кг)
 
-## Protection against double-run
+## Захист від подвійного запуску
 
-At the start of `_compute_daily_storage_costs()` we check if a record for today already exists.
-If yes — skip. This prevents double accrual if cron runs twice (e.g., after server restart).
+На початку `_compute_daily_storage_costs()` перевіряється наявність запису за сьогодні.
+Якщо запис є — виходимо. Це запобігає подвійному нарахуванню при повторному запуску cron.
 
-## Rate
+## Ставка нарахування
 
-`0.01 USD/kg/day` is hardcoded as a constant.
-For production use it can be moved to `res.config.settings` as a company-level parameter.
+`0.01 USD/кг/добу` задана як константа в коді.
+Для продакшн-використання може бути винесена в `res.config.settings` як параметр компанії.

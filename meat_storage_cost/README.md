@@ -1,39 +1,44 @@
 # Meat Storage Daily Cost
 
-Odoo 18 module that implements daily storage cost accrual for cold warehouse inventory using FIFO valuation.
+Модуль Odoo 18 для щоденного нарахування витрат зберігання на холодильному складі з використанням методу оцінки запасів FIFO.
 
-## What it does
+## Що робить модуль
 
-- Every day increases the cost of products in the warehouse proportionally to their mass
-- Rate: **0.01 USD per 1 kg per day**
-- Only considers stock remaining at the time of calculation
-- Provides an analytical report (tree + pivot) showing:
-  - Number of times price was increased per batch
-  - Initial cost at warehouse arrival
-  - Current cost after all accruals
+- Щодня збільшує собівартість продуктів на складі пропорційно їхній масі
+- Тариф: **0.01 USD за 1 кг на добу**
+- Враховує лише залишки, наявні на складі в момент розрахунку
+- Надає аналітичний звіт (tree + pivot) з відображенням:
+  - Кількості разів підвищення ціни партії
+  - Початкової собівартості на момент надходження
+  - Поточної собівартості після всіх нарахувань
 
-## Requirements
+## Вимоги
 
 - Odoo 18 Community
-- Modules: `stock`, `stock_account`
-- Products must use **FIFO** costing method (set on product category)
+- Модулі: `stock`, `stock_account`
+- Продукти повинні використовувати метод **FIFO** (налаштовується в категорії продукту)
 
-## Installation
+## Встановлення
 
-1. Copy `meat_storage_cost` folder into your Odoo addons path
-2. Add the path to `addons_path` in `odoo.conf`
-3. Restart Odoo server
-4. Go to **Apps** → search `Meat Storage Daily Cost` → **Install**
+1. Скопіювати папку `meat_storage_cost` у свій шлях до addons
+2. Додати шлях до `addons_path` у файлі `odoo.conf`
+3. Перезапустити сервер Odoo
+4. Перейти в **Застосунки** → знайти `Meat Storage Daily Cost` → **Встановити**
 
-## Usage
+Або через командний рядок:
+```bash
+python odoo -c odoo.conf -d your_database -i meat_storage_cost
+```
 
-### Automatic (recommended)
-The cron job **"Daily Storage Cost Accrual"** runs automatically every day.
+## Використання
 
-### Manual run
-**Settings → Technical → Scheduled Actions → Daily Storage Cost Accrual → Run Manually**
+### Автоматично (рекомендовано)
+Планувальник **"Daily Storage Cost Accrual"** запускається автоматично щодня.
 
-### Reports
-**Inventory → Storage Costs → Storage Cost Report** — pivot + tree analysis
+### Запуск вручну
+**Налаштування → Технічне → Заплановані дії → Daily Storage Cost Accrual → Запустити вручну**
 
-**Inventory → Storage Costs → Storage Cost Log** — full list of daily accruals
+### Звіти
+**Склад → Operations → Storage Costs → Storage Cost Report** — зведений аналіз (pivot + tree)
+
+**Склад → Operations → Storage Costs → Storage Cost Log** — повний журнал щоденних нарахувань
