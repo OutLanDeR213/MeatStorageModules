@@ -7,7 +7,7 @@ class StockStorageCost(models.Model):
     _order = 'date desc, id desc'
     _rec_name = 'date'
 
-    STORAGE_COST_RATE = 0.01  # USD per kg per day
+    STORAGE_COST_RATE = 0.01
 
     date = fields.Date(required=True, index=True)
     product_id = fields.Many2one('product.product', required=True, index=True)

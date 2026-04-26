@@ -10,15 +10,15 @@
 вартість = кількість (кг) × 0.01 USD
 ```
 
-Якщо товар в штуках — береться `product.weight`. Якщо в кг — конвертується через UoM.
+Якщо товар в штуках - береться `product.weight`. Якщо в кг - конвертується через UoM.
 
-Собівартість не чіпається напряму в `product.product` — це заборонено умовою задачі. Замість цього створюється новий запис у `stock.valuation.layer` з `quantity=0` і `value=вартість_зберігання`. Це стандартний Odoo-підхід, яким користуються Landed Costs.
+Собівартість не чіпається напряму в `product.product` - це заборонено умовою задачі. Замість цього створюється новий запис у `stock.valuation.layer` з `quantity=0` і `value=вартість_зберігання`. Це стандартний Odoo-підхід, яким користуються Landed Costs.
 
 ## Звіти
 
-**Storage Cost Log** — журнал кожного нарахування: коли, який продукт, скільки кг, яка сума.
+**Storage Cost Log** - журнал кожного нарахування: коли, який продукт, скільки кг, яка сума.
 
-**Storage Cost Report** — зведена таблиця по партіях: початкова собівартість, скільки разів нараховували, поточна собівартість. Є pivot і tree view.
+**Storage Cost Report** - зведена таблиця по партіях: початкова собівартість, скільки разів нараховували, поточна собівартість. Є pivot і tree view.
 
 Меню: `Inventory → Operations → Storage Costs`
 
@@ -30,12 +30,8 @@
 4. Встановити модуль через Apps або командою:
 
 ```bash
-python odoo -c odoo.conf -d your_db -i meat_storage_cost
+C:\odootest\venv\Scripts\python.exe C:\odootest\odoo-18.0.post20251213\setup\odoo -c C:\odootest\odoo.conf -d odootest -u meat_storage_cost
 ```
-
-## Ручний запуск
-
-Settings → Technical → Scheduled Actions → **Daily Storage Cost Accrual** → Run Manually
 
 ## Вимоги
 
