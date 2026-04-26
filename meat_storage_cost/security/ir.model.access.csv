@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_storage_cost_user,stock.storage.cost user,model_stock_storage_cost,stock.group_stock_user,1,0,0,0
+access_stock_storage_cost_manager,stock.storage.cost manager,model_stock_storage_cost,stock.group_stock_manager,1,1,1,1
+access_stock_storage_cost_report_user,stock.storage.cost.report user,model_stock_storage_cost_report,stock.group_stock_user,1,0,0,0

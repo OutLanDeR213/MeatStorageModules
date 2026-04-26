@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== STORAGE COST LOG ==================== -->
+
+    <record id="view_stock_storage_cost_tree" model="ir.ui.view">
+        <field name="name">stock.storage.cost.tree</field>
+        <field name="model">stock.storage.cost</field>
+        <field name="arch" type="xml">
+            <list string="Storage Cost Log" create="false" edit="false">
+                <field name="date"/>
+                <field name="product_id"/>
+                <field name="lot_id"/>
+                <field name="adjustment_number" string="Adjustment #"/>
+                <field name="quantity_kg" string="Qty (kg)"/>
+                <field name="initial_unit_cost" string="Initial Cost/Unit"/>
+                <field name="storage_cost" string="Storage Cost (USD)"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_stock_storage_cost_log" model="ir.actions.act_window">
+        <field name="name">Storage Cost Log</field>
+        <field name="res_model">stock.storage.cost</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- ==================== STORAGE COST REPORT ==================== -->
+
+    <record id="view_stock_storage_cost_report_tree" model="ir.ui.view">
+        <field name="name">stock.storage.cost.report.tree</field>
+        <field name="model">stock.storage.cost.report</field>
+        <field name="arch" type="xml">
+            <list string="Storage Cost Report" create="false" edit="false" delete="false">
+                <field name="product_id"/>
+                <field name="lot_id"/>
+                <field name="initial_unit_cost" string="Initial Cost/Unit"/>
+                <field name="adjustment_count" string="Adjustments #"/>
+                <field name="total_storage_cost" string="Total Storage Cost"/>
+                <field name="current_unit_cost" string="Current Cost/Unit"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_stock_storage_cost_report_pivot" model="ir.ui.view">
+        <field name="name">stock.storage.cost.report.pivot</field>
+        <field name="model">stock.storage.cost.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Storage Cost Analysis">
+                <field name="product_id" type="row"/>
+                <field name="lot_id" type="col"/>
+                <field name="adjustment_count" type="measure"/>
+                <field name="total_storage_cost" type="measure"/>
+                <field name="current_unit_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_stock_storage_cost_report" model="ir.actions.act_window">
+        <field name="name">Storage Cost Report</field>
+        <field name="res_model">stock.storage.cost.report</field>
+        <field name="view_mode">list,pivot</field>
+    </record>
+
+    <!-- ==================== MENU ==================== -->
+
+    <menuitem
+        id="menu_stock_storage_cost_root"
+        name="Storage Costs"
+        parent="stock.menu_stock_warehouse_mgmt"
+        sequence="100"/>
+
+    <menuitem
+        id="menu_stock_storage_cost_report"
+        name="Storage Cost Report"
+        parent="menu_stock_storage_cost_root"
+        action="action_stock_storage_cost_report"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_stock_storage_cost_log"
+        name="Storage Cost Log"
+        parent="menu_stock_storage_cost_root"
+        action="action_stock_storage_cost_log"
+        sequence="20"/>
+
+</odoo>
