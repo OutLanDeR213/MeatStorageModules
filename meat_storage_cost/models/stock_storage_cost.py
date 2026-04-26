@@ -5,14 +5,15 @@ class StockStorageCost(models.Model):
     _name = 'stock.storage.cost'
     _description = 'Daily Storage Cost Log'
     _order = 'date desc, id desc'
+    _rec_name = 'date'
 
     STORAGE_COST_RATE = 0.01  # USD per kg per day
 
-    date = fields.Date(required=True)
+    date = fields.Date(required=True, index=True)
     product_id = fields.Many2one('product.product', required=True, index=True)
     lot_id = fields.Many2one('stock.lot')
     source_layer_id = fields.Many2one(
-        'stock.valuation.layer', string='Source Layer', ondelete='set null'
+        'stock.valuation.layer', string='Source Layer', ondelete='set null', index=True
     )
     adjustment_layer_id = fields.Many2one(
         'stock.valuation.layer', string='Adjustment Layer', ondelete='set null'
@@ -88,7 +89,6 @@ class StockStorageCost(models.Model):
             adj_layer = self.env['stock.valuation.layer'].create({
                 'product_id': vals['product_id'],
                 'quantity': 0.0,
-                'unit_cost': 0.0,
                 'value': vals['storage_cost'],
                 'description': f'Daily storage cost #{vals["adj_number"]} — {today}',
                 'company_id': layer.company_id.id,
