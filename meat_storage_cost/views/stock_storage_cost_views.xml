@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ==================== STORAGE COST LOG ==================== -->
+    <!-- Storage Cost Log -->
+
+    <record id="view_stock_storage_cost_form" model="ir.ui.view">
+        <field name="name">stock.storage.cost.form</field>
+        <field name="model">stock.storage.cost</field>
+        <field name="arch" type="xml">
+            <form string="Storage Cost Entry" create="false" edit="false" delete="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="product_id"/>
+                            <field name="lot_id"/>
+                            <field name="adjustment_number"/>
+                        </group>
+                        <group>
+                            <field name="quantity_kg"/>
+                            <field name="initial_unit_cost"/>
+                            <field name="storage_cost"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
     <record id="view_stock_storage_cost_tree" model="ir.ui.view">
         <field name="name">stock.storage.cost.tree</field>
         <field name="model">stock.storage.cost</field>
         <field name="arch" type="xml">
-            <list string="Storage Cost Log" create="false" edit="false">
+            <list string="Storage Cost Log" create="false" edit="false" delete="false">
                 <field name="date"/>
                 <field name="product_id"/>
                 <field name="lot_id"/>
@@ -22,10 +46,10 @@
     <record id="action_stock_storage_cost_log" model="ir.actions.act_window">
         <field name="name">Storage Cost Log</field>
         <field name="res_model">stock.storage.cost</field>
-        <field name="view_mode">list</field>
+        <field name="view_mode">list,form</field>
     </record>
 
-    <!-- ==================== STORAGE COST REPORT ==================== -->
+    <!-- Storage Cost Report -->
 
     <record id="view_stock_storage_cost_report_tree" model="ir.ui.view">
         <field name="name">stock.storage.cost.report.tree</field>
@@ -62,7 +86,7 @@
         <field name="view_mode">list,pivot</field>
     </record>
 
-    <!-- ==================== MENU ==================== -->
+    <!-- Menu -->
 
     <menuitem
         id="menu_stock_storage_cost_root"
