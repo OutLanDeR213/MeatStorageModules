@@ -33,6 +33,58 @@
 C:\odootest\venv\Scripts\python.exe C:\odootest\odoo-18.0.post20251213\setup\odoo -c C:\odootest\odoo.conf -d odootest -u meat_storage_cost
 ```
 
+## REST API
+
+Модуль надає три ендпоінти для зовнішніх інтеграцій.
+
+### Аутентифікація
+
+Всі запити потребують API ключ в заголовку:
+```
+Authorization: Bearer <api_key>
+```
+
+**Де взяти ключ:** Settings → Users & Companies → Users → обери юзера → вкладка **API Keys** → **New API Key**.
+
+### Ендпоінти
+
+```
+GET  /api/v1/storage-costs              — список нарахувань (пагінація)
+GET  /api/v1/storage-costs?product_id=5 — фільтр по продукту
+GET  /api/v1/storage-costs/report       — зведений звіт по партіях
+POST /api/v1/storage-costs/run          — запустити нарахування вручну
+```
+
+### Приклад запиту
+
+```bash
+curl -X GET http://localhost:8069/api/v1/storage-costs \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+### Формат відповіді
+
+```json
+{
+  "success": true,
+  "total": 42,
+  "limit": 50,
+  "offset": 0,
+  "data": [
+    {
+      "id": 1,
+      "date": "2026-04-26",
+      "product": "Beef Test",
+      "lot": null,
+      "quantity_kg": 500.0,
+      "storage_cost": 5.0,
+      "initial_unit_cost": 200.0,
+      "adjustment_number": 1
+    }
+  ]
+}
+```
+
 ## Вимоги
 
 - Odoo 18 Community
